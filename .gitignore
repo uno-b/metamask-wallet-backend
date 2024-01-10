@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+build/
+dist/
+
+# Cache and logs
+.cache/
+logs/
+
+# Ignored files by operating systems
+.DS_Store
+Thumbs.db
+
+# Editor configuration files
+.idea/
+.vscode/
+
+# Personal environments and secrets
+.env
+.env.local
+.env.development
+.env.production
+
+# Lock files
+package-lock.json
+yarn.lock
