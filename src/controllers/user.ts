@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
+const { ethers } = require('ethers');
 import jwt from 'jsonwebtoken';
 
 const User = require('../models/user');
 
 exports.login = async (req: Request, res: Response) => {
   try {
-    const address = req.body.address;
+    const { address, message, signature } = req.body;
 
     const existingUser = await User.findOne({ address });
 
@@ -15,13 +16,19 @@ exports.login = async (req: Request, res: Response) => {
         { userId: existingUser._id },
         process.env.JWT_SECRET!,
         {
-          expiresIn: '1h',
+          expiresIn: '24h',
         }
       );
 
       res.json({ user: existingUser, token });
     } else {
       // New User
+      const signedAddress = ethers.verifyMessage(message, signature);
+
+      if (signedAddress !== address) {
+        res.status(401).json({ error: 'Wrong signature' });
+      }
+
       const newUser = new User({ address });
       await newUser.save();
       const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET!, {
