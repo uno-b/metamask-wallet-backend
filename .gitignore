@@ -18,7 +18,6 @@ Thumbs.db
 .vscode/
 
 # Personal environments and secrets
-.env
 .env.local
 .env.development
 .env.production
